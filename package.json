@@ -1,21 +1,21 @@
 {
-  "name": "discord-music-bot",
+  "name": "discord-karaoke-bot",
   "version": "2.3.0",
-  "description": "Simple music bot for Discord servers.",
+  "description": "Simple karaoke bot for Discord servers.",
   "main": "musicbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agubelu/discord-music-bot.git"
+    "url": "git+https://github.com/KnifesmithCode/discord-karaoke-bot.git"
   },
   "keywords": [
     "discord",
     "bot",
     "music"
   ],
-  "author": "agubelu",
+  "author": "KnifesmithCode",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/agubelu/discord-music-bot/issues"
@@ -29,5 +29,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "homepage": "https://github.com/agubelu/discord-music-bot#readme"
+  "homepage": "https://github.com/KnifesmithCode/discord-karaoke-bot#readme"
 }
