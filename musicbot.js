@@ -486,7 +486,7 @@ function get_lyrics(message, query) {
 	console.log(options.url + " " + options.headers.Authorization);
 
 	request(options, function(error, response, body) {
-		if(error.length == 0) {
+		if(error == null) {
 			azPath = "https://www.azlyrics.com/lyrics/" +
 		    response.hits[0].result.primary_artist.name + "/" + response.hits[0].result.title + ".html";
 		  azPath = azPath.toLowerCase();
