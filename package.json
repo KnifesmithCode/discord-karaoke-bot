@@ -21,6 +21,7 @@
     "url": "https://github.com/agubelu/discord-karaoke-bot/issues"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.0.0",
     "genius-api": "git+https://github.com/KnifesmithCode/genius-api.git",
     "node-opus": "^0.2.4",
