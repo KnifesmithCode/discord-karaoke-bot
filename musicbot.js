@@ -491,6 +491,7 @@ function get_lyrics(message, query) {
 			azPath = "https://www.azlyrics.com/lyrics/" +
 		    jsonResponse.response.hits[0].result.primary_artist.name + "/" + jsonResponse.response.hits[0].result.title + ".html";
 		  azPath = azPath.toLowerCase();
+			console.log(azPath);
 
 			if(azPath != undefined) {
 		    request(azPath, function(azError, azResponse, azBody) {
