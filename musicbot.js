@@ -490,7 +490,7 @@ function search_video(message, query) {
 	})
 }
 
-function search_video_k(message, query) {\
+function search_video_k(message, query) {
 	var reply;
 	request("https://www.googleapis.com/youtube/v3/search?part=id&type=video&q=" + encodeURIComponent(query + " karaoke") + "&key=" + yt_api_key, (error, response, body) => {
 		var json = JSON.parse(body);
