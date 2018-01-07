@@ -483,6 +483,7 @@ function get_lyrics(message, query) {
 			'Authorization': 'Bearer ' + geniusKey
 		}
 	};
+	console.log(options.url + " " + options.headers.Authorization);
 
 	request(options, function(error, response, body) {
 		if(error.length == 0) {
