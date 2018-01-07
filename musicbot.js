@@ -17,6 +17,11 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const ytdl = require("ytdl-core");
 const request = require("request");
+const geniusApi = require("genius-api");
+
+var jsonKeys = JSON.parse(fs.readFileSync("keys.json"));
+
+var genius = new geniusApi(jsonKeys.genius);
 
 const bot = new Discord.Client({autoReconnect: true, max_message_cache: 0});
 
@@ -351,8 +356,7 @@ var commands = [
 				for(var i = 1; i < params.length; i++) {
 					q += params[i] + " ";
 				}
-				q += " karaoke";
-				search_video(message, q);
+				search_video_k(message, q);
 			}
 		}
 	}
@@ -484,6 +488,74 @@ function search_video(message, query) {
 			add_to_queue(json.items[0].id.videoId, message);
 		}
 	})
+}
+
+function search_video_k(message, query) {\
+	var reply;
+	request("https://www.googleapis.com/youtube/v3/search?part=id&type=video&q=" + encodeURIComponent(query + " karaoke") + "&key=" + yt_api_key, (error, response, body) => {
+		var json = JSON.parse(body);
+		if("error" in json) {
+			reply = "An error has occurred: " + json.error.errors[0].message + " - " + json.error.errors[0].reason;
+		} else if(json.items.length === 0) {
+			reply = "No videos found matching the search criteria.";
+		} else {
+			genius.searchSync(query).then(function(response) {
+			  azPath = "https://www.azlyrics.com/lyrics/" +
+			    response.hits[0].result.primary_artist.name + "/" + response.hits[0].result.title + ".html";
+			  azPath = azPath.toLowerCase();
+				request(azPath, function(error, response, body) {
+					console.log('error:', error); // Print the error if one occurred
+					console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+					var $ = cheerio.load(body);
+
+					console.log($('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text());
+					reply += $('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text();
+					done = true;
+					message.reply(reply);
+					return;
+				});
+			});
+			add_to_queue(json.items[0].id.videoId, message);
+		}
+	});
+	genius.searchSync(query).then(function(response) {
+	  azPath = "https://www.azlyrics.com/lyrics/" +
+	    response.hits[0].result.primary_artist.name + "/" + response.hits[0].result.title + ".html";
+	  azPath = azPath.toLowerCase();
+		request(azPath, function(error, response, body) {
+			console.log('error:', error); // Print the error if one occurred
+			console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+			var $ = cheerio.load(body);
+
+			console.log($('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text());
+			reply += $('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text();
+			done = true;
+			message.reply(reply);
+			return;
+		});
+	});
+	var done = false;
+	function recursionYay(message, reply) {
+	  if(done) return;
+	  if(azPath != undefined) {
+	    request(azPath, function(error, response, body) {
+	      console.log('error:', error); // Print the error if one occurred
+	      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+	      var $ = cheerio.load(body);
+
+				console.log($('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text());
+	      reply += $('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text();
+	      done = true;
+				message.reply(reply);
+	      return;
+	    });
+	  } else {
+	    setTimeout(recursionYay(message, reply), 100);
+	    return;
+	  }
+	}
+
+	recursionYay();
 }
 
 function queue_playlist(playlistId, message, pageToken = '') {
