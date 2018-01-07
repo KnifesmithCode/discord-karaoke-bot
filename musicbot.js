@@ -1,16 +1,16 @@
-				////////////////////////////////////////////////////////////////////////////////   
-				//    This program is free software: you can redistribute it and/or modify    //   
-				//    it under the terms of the GNU General Public License as published by    //   
-				//    the Free Software Foundation, either version 3 of the License, or       //   
-				//    (at your option) any later version.                                     //   
-				//                                                                            //   
-				//    This program is distributed in the hope that it will be useful,         //   
-				//    but WITHOUT ANY WARRANTY; without even the implied warranty of          //   
-				//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           //   
-				//    GNU General Public License for more details.                            //   
-				//                                                                            //   
-				//    You should have received a copy of the GNU General Public License       //   
-				//    along with this program.  If not, see <http://www.gnu.org/licenses/>.   //   
+				////////////////////////////////////////////////////////////////////////////////
+				//    This program is free software: you can redistribute it and/or modify    //
+				//    it under the terms of the GNU General Public License as published by    //
+				//    the Free Software Foundation, either version 3 of the License, or       //
+				//    (at your option) any later version.                                     //
+				//                                                                            //
+				//    This program is distributed in the hope that it will be useful,         //
+				//    but WITHOUT ANY WARRANTY; without even the implied warranty of          //
+				//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           //
+				//    GNU General Public License for more details.                            //
+				//                                                                            //
+				//    You should have received a copy of the GNU General Public License       //
+				//    along with this program.  If not, see <http://www.gnu.org/licenses/>.   //
 				////////////////////////////////////////////////////////////////////////////////
 
 const Discord = require("discord.js");
@@ -59,7 +59,7 @@ var commands = [
 			}
 		}
 	},
-	
+
 	{
 		command: "resume",
 		description: "Resumes playlist",
@@ -145,7 +145,7 @@ var commands = [
 			} else {
 				var response = "Sorry?";
 			}
-			
+
 			message.reply(response);
 		}
 	},
@@ -156,18 +156,18 @@ var commands = [
 		parameters: [],
 		execute: function(message, params) {
 			var response = "Available commands:";
-			
+
 			for(var i = 0; i < commands.length; i++) {
 				var c = commands[i];
 				response += "\n!" + c.command;
-				
+
 				for(var j = 0; j < c.parameters.length; j++) {
 					response += " <" + c.parameters[j] + ">";
 				}
-				
+
 				response += ": " + c.description;
 			}
-			
+
 			message.reply(response);
 		}
 	},
@@ -192,7 +192,7 @@ var commands = [
 		parameters: [],
 		execute: function(message, params) {
 			var response = "";
-	
+
 			if(is_queue_empty()) {
 				response = "the queue is empty.";
 			} else {
@@ -203,7 +203,7 @@ var commands = [
 
 				if(long_queue) response += "\n**...and " + (queue.length - 30) + " more.**";
 			}
-			
+
 			message.reply(response);
 		}
 	},
@@ -244,7 +244,7 @@ var commands = [
 			message.reply('Request "' + deleted[0].title +'" was removed from the queue.');
 		}
 	},
-	
+
 	{
 		command: "aliases",
 		description: "Displays the stored aliases",
@@ -252,17 +252,17 @@ var commands = [
 		execute: function(message, params) {
 
 			var response = "Current aliases:";
-			
+
 			for(var alias in aliases) {
 				if(aliases.hasOwnProperty(alias)) {
 					response += "\n" + alias + " -> " + aliases[alias];
 				}
 			}
-			
+
 			message.reply(response);
 		}
 	},
-	
+
 	{
 		command: "setalias",
 		description: "Sets an alias, overriding the previous one if it already exists",
@@ -271,14 +271,14 @@ var commands = [
 
 			var alias = params[1].toLowerCase();
 			var val = params[2];
-			
+
 			aliases[alias] = val;
 			fs.writeFileSync(aliases_file_path, JSON.stringify(aliases));
-			
+
 			message.reply("Alias " + alias + " -> " + val + " set successfully.");
 		}
 	},
-	
+
 	{
 		command: "deletealias",
 		description: "Deletes an existing alias",
@@ -317,7 +317,7 @@ var commands = [
 			});
 		}
 	},
-  
+
   {
     command: "setavatar",
 		description: "Set bot avatar, overriding the previous one if it already exists",
@@ -334,10 +334,28 @@ var commands = [
 			})
 			.catch((err) => {
 				message.reply('Error: Unable to set avatar');
-				console.log('Error on setavatar command:', err); 
+				console.log('Error on setavatar command:', err);
       });
 		}
-  }
+  },
+
+	{
+		command: "searchk",
+		description: "Searches for a karaoke video on YouTube and adds it to the queue",
+		parameters: ["query"],
+		execute: function(message, params) {
+			if(yt_api_key === null) {
+				message.reply("You need a YouTube API key in order to use the !search command. Please see https://github.com/agubelu/discord-music-bot#obtaining-a-youtube-api-key");
+			} else {
+				var q = "";
+				for(var i = 1; i < params.length; i++) {
+					q += params[i] + " ";
+				}
+				q += " karaoke";
+				search_video(message, q);
+			}
+		}
+	}
 
 ];
 
@@ -516,7 +534,7 @@ exports.run = function(server_name, text_channel_name, voice_channel_name, alias
 
 		var voice_channel = server.channels.find(chn => chn.name === voice_channel_name && chn.type === "voice"); //The voice channel the bot will connect to
 		if(voice_channel === null) throw "Couldn't find voice channel '" + voice_channel_name + "' in server '" + server_name + "'";
-		
+
 		text_channel = server.channels.find(chn => chn.name === text_channel_name && chn.type === "text"); //The text channel the bot will use to announce stuff
 		if(text_channel === null) throw "Couldn't find text channel '#" + text_channel_name + "' in server '" + server_name + "'";
 
