@@ -17,7 +17,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const ytdl = require("ytdl-core");
 const request = require("request");
-const cheerio = reqiure("cheerio");
+const cheerio = require("cheerio");
 
 var jsonKeys = JSON.parse(fs.readFileSync("keys.json"));
 var geniusKey = jsonKeys.genius;
