@@ -17,6 +17,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const ytdl = require("ytdl-core");
 const request = require("request");
+const cheerio = requre("cheerio");
 
 var jsonKeys = JSON.parse(fs.readFileSync("keys.json"));
 var geniusKey = jsonKeys.genius;
@@ -476,7 +477,37 @@ function is_bot_playing() {
 }
 
 function get_lyrics(message, query) {
+	var options = {
+		url: "https://www.api.genius.com/search?q=" + query,
+		headers: {
+			'Authorization': 'Bearer ' + geniusKey
+		}
+	};
 
+	request(options, function(error, response, body) {
+		if(error.length == 0) {
+			azPath = "https://www.azlyrics.com/lyrics/" +
+		    response.hits[0].result.primary_artist.name + "/" + response.hits[0].result.title + ".html";
+		  azPath = azPath.toLowerCase();
+
+			if(azPath != undefined) {
+		    request(azPath, function(azError, azResponse, azBody) {
+		      console.log('error:', azError); // Print the error if one occurred
+		      console.log('statusCode:', azResponse && response.statusCode); // Print the response status code if a response was received
+		      //console.log('body:', body);
+		      var $ = cheerio.load(azBody);
+
+		      //console.log($('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text());
+					message.reply($('html body div.container.main-page div.row div.col-xs-12.col-lg-8.text-center div:not([class])').text());
+		      return;
+		    });
+		  } else {
+				message.reply("Something went wrong!")
+			}
+		} else {
+			message.reply("An error has occurred: " + error);
+		}
+	});
 }
 
 function search_video(message, query) {
@@ -488,6 +519,7 @@ function search_video(message, query) {
 			message.reply("No videos found matching the search criteria.");
 		} else {
 			add_to_queue(json.items[0].id.videoId, message);
+			get_lyrics(message, query);
 		}
 	})
 }
