@@ -490,7 +490,7 @@ function get_lyrics(message, query) {
 			var jsonResponse = JSON.parse(body);
 			azPath = "https://www.azlyrics.com/lyrics/" +
 		    jsonResponse.response.hits[0].result.primary_artist.name + "/" + jsonResponse.response.hits[0].result.title + ".html";
-		  azPath = azPath.toLowerCase();
+		  azPath = azPath.toLowerCase().replace(/\s/g, '');
 			console.log(azPath);
 
 			if(azPath != undefined) {
