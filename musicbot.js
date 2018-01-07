@@ -478,7 +478,7 @@ function is_bot_playing() {
 
 function get_lyrics(message, query) {
 	var options = {
-		url: "https://www.api.genius.com/search?q=" + query,
+		url: "api.genius.com/search?q=" + query,
 		headers: {
 			'Authorization': 'Bearer ' + geniusKey
 		}
