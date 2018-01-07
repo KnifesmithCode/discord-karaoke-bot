@@ -18,10 +18,11 @@
   "author": "KnifesmithCode",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/agubelu/discord-music-bot/issues"
+    "url": "https://github.com/agubelu/discord-karaoke-bot/issues"
   },
   "dependencies": {
     "discord.js": "^11.0.0",
+    "genius-api": "git+https://github.com/KnifesmithCode/genius-api.git",
     "node-opus": "^0.2.4",
     "request": "^2.79.0",
     "ytdl-core": "^0.7.21"
