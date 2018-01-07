@@ -1,4 +1,4 @@
-<p align="center"><a href="https://nodei.co/npm/discord-music-bot/"><img src="https://nodei.co/npm/discord-music-bot.png"></a></p>
+I'm working on adding karaoke to this bot, because it was requested of me.
 
 A Node.JS Discord bot that takes song requests from videos on YouTube, queues them and plays the audio of said videos on a voice channel.
 
