@@ -519,7 +519,6 @@ function search_video(message, query) {
 			message.reply("No videos found matching the search criteria.");
 		} else {
 			add_to_queue(json.items[0].id.videoId, message);
-			get_lyrics(message, query);
 		}
 	})
 }
@@ -533,6 +532,7 @@ function search_video_k(message, query) {
 			message.reply("No videos found matching the search criteria.");
 		} else {
 			add_to_queue(json.items[0].id.videoId, message);
+			get_lyrics(message, query);
 		}
 	})
 }
